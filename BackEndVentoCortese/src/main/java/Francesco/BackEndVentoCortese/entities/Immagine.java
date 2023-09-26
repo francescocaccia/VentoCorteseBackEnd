@@ -5,34 +5,35 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
 @Entity
-@Table(name = "recensioni")
-@Data
-public class Recensione {
+@ToString
+@Table(name = "immagini")
+public class Immagine {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long idRecensione;
+	private Long idCard;
 
 	@Column
 	@NotNull
-	private int numeroStelle;
+	private String immagine1;
 
-	@Column(nullable = true, length = 500)
-	private String contenutoRecensione;
+	@Column
+	private String immagine2;
+
+	@Column
+	private String immagine3;
 
 	@ManyToOne
-	@JoinColumn(name = "idCliente")
-	private Cliente cliente;
-
-	@ManyToOne
-	@JoinColumn(name = "idAppartamentino")
-	private Appartamentini appartamentino;
+	private Appartamentini appartamentini;
 
 }

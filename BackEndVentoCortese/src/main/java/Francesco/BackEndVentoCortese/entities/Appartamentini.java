@@ -1,99 +1,74 @@
 package Francesco.BackEndVentoCortese.entities;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 public class Appartamentini {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idAppartamentino;
 
-    @Column(nullable = false)
-    private String nome;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long idAppartamentino;
 
-    @OneToMany(mappedBy = "appartamentino", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Prenotazione> prenotazioni;
+	@Column
+	@NotNull
+	private String nome;
 
+	@OneToMany(mappedBy = "appartamentino", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<Prenotazione> prenotazioni;
 
-    @Column(nullable = false)
-    private int numeroDiCamere;
+	@Column
+	@NotNull
+	private int numeroDiCamere;
 
-    @Column(nullable = false)
-    private int capienzaMassima;
+	@Column
+	@NotNull
+	private int capienzaMassima;
 
-    @Column(nullable = false)
-    private double tariffa;
+	@Column
+	@NotNull
+	private double tariffa;
 
-    @Column(nullable = false)
-    private boolean disponibilita;
+	@Column
+	@NotNull
+	private boolean disponibilita;
 
-    @Column(length = 1000) 
-    private String descrizione;
+	@Column(length = 1000)
+	private String descrizione;
 
-    @ElementCollection
-    private List<String> immagini;
+	@OneToMany(mappedBy = "appartamentini", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Immagine> immagini;
 
-    @OneToMany(mappedBy = "appartamentino", fetch = FetchType.LAZY)
-    private List<Recensione> recensioni;
+	@OneToMany(mappedBy = "appartamentino", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<Recensione> recensioni;
 
-    public void setIdAppartamentino(Long idAppartamentino) {
-        this.idAppartamentino = idAppartamentino;
-    }
+	@Override
+	public String toString() {
+		return "Appartamentini [idAppartamentino=" + idAppartamentino + ", nome=" + nome + ", numeroDiCamere="
+				+ numeroDiCamere + ", capienzaMassima=" + capienzaMassima + ", tariffa=" + tariffa + ", disponibilita="
+				+ disponibilita + ", descrizione=" + descrizione + "]";
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setPrenotazioni(List<Prenotazione> prenotazioni) {
-        this.prenotazioni = prenotazioni;
-    }
-
-    public void setNumeroDiCamere(int numeroDiCamere) {
-        this.numeroDiCamere = numeroDiCamere;
-    }
-
-    public void setCapienzaMassima(int capienzaMassima) {
-        this.capienzaMassima = capienzaMassima;
-    }
-
-    public void setTariffa(double tariffa) {
-        this.tariffa = tariffa;
-    }
-
-    public void setDisponibilita(boolean disponibilita) {
-        this.disponibilita = disponibilita;
-    }
-
-    public void setDescrizione(String descrizione) {
-        this.descrizione = descrizione;
-    }
-
-    public void setImmagini(List<String> immagini) {
-        this.immagini = immagini;
-    }
-
-    public void setRecensioni(List<Recensione> recensioni) {
-        this.recensioni = recensioni;
-    }
 }
-

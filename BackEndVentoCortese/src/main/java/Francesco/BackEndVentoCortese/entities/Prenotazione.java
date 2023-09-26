@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,29 +24,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Prenotazione {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPrenotazione;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long idPrenotazione;
 
-    @Temporal(TemporalType.DATE) // Usa solo la data, non l'orario
-    @Column(nullable = false)
-    private Date dataInizio;
+	@Temporal(TemporalType.DATE) // Usa solo la data, non l'orario
+	@Column
+	@NotNull
+	private Date dataInizio;
 
-    @Temporal(TemporalType.DATE) // Usa solo la data, non l'orario
-    @Column(nullable = false)
-    private Date dataFine;
+	@Temporal(TemporalType.DATE) // Usa solo la data, non l'orario
+	@Column
+	@NotNull
+	private Date dataFine;
 
-    @ManyToOne
-    @JoinColumn(name = "idCliente") 
-    private Cliente cliente;
+	@ManyToOne
+	@JoinColumn(name = "idCliente")
+	private Cliente cliente;
 
-    @Column(nullable = false)
-    private boolean confermata;
+	@Column
+	@NotNull
+	private boolean confermata;
 
-    @Column(nullable = false)
-    private double importoTotale;
-    @ManyToOne
-    @JoinColumn(name = "idAppartamentino") 
-    private Appartamentini appartamentino;
+	@Column
+	@NotNull
+	private double importoTotale;
+	@ManyToOne
+	private Appartamentini appartamentino;
+
+	@Column
+	@NotNull
+	private String codicePrenotazione;
 
 }
