@@ -40,4 +40,8 @@ public class Cliente {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente")
 	private Set<Prenotazione> prenotazioni = new HashSet<>();
 
+	public Long getId() {
+		return this.idCliente;
+	}
+
 }

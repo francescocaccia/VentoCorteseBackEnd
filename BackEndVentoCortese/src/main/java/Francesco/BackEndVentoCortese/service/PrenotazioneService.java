@@ -1,6 +1,8 @@
 package Francesco.BackEndVentoCortese.service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,9 @@ import org.springframework.stereotype.Service;
 import Francesco.BackEndVentoCortese.entities.Appartamentini;
 import Francesco.BackEndVentoCortese.entities.Cliente;
 import Francesco.BackEndVentoCortese.entities.Prenotazione;
+import Francesco.BackEndVentoCortese.exception.BookingConflictException;
+import Francesco.BackEndVentoCortese.exception.PrenotazioneNotFoundException;
+import Francesco.BackEndVentoCortese.exception.UnauthorizedException;
 import Francesco.BackEndVentoCortese.payload.PrenotazionePayload;
 import Francesco.BackEndVentoCortese.repository.AppartamentiniRepository;
 import Francesco.BackEndVentoCortese.repository.ClienteRepository;
@@ -66,4 +71,62 @@ public class PrenotazioneService {
 		log.info("Salvataggio nuova prenotazione nel database...");
 		return prenotazioneRepository.save(nuovaPrenotazione);
 	}
+
+//PUT+++++++++++++++++PUT++++++++++++++++PUT+++++++++++PUT
+	public Prenotazione modificaPrenotazione(Long idPrenotazione, Long idCliente, Date nuovaDataInizio,
+			Date nuovaDataFine) throws PrenotazioneNotFoundException {
+		// Trova la prenotazione esistente
+		Prenotazione prenotazioneEsistente = prenotazioneRepository.findById(idPrenotazione).orElse(null);
+		if (prenotazioneEsistente == null) {
+			// gestisci l'errore come preferisci, ad esempio lanciando un'eccezione
+			throw new PrenotazioneNotFoundException();
+		}
+
+		// Verifica che la prenotazione esista e che l'ID del cliente corrisponda
+		if (prenotazioneEsistente == null || !prenotazioneEsistente.getCliente().getId().equals(idCliente)) {
+			// Genera un errore o ritorna null
+			throw new UnauthorizedException("Non hai il permesso di modificare questa prenotazione.");
+		}
+
+		// Controlla se le nuove date sono disponibili
+		List<Prenotazione> prenotazioniInConflitto = prenotazioneRepository
+				.findByAppartamentinoAndDataInizioLessThanEqualAndDataFineGreaterThanEqual(
+						prenotazioneEsistente.getAppartamentino(), nuovaDataInizio, nuovaDataFine);
+		for (Prenotazione p : prenotazioniInConflitto) {
+			if (!p.getIdPrenotazione().equals(idPrenotazione)) {
+				// C'è un conflitto
+				throw new BookingConflictException("Le date selezionate sono già prenotate.");
+			}
+		}
+
+		// Modifica la prenotazione e salvala
+		prenotazioneEsistente.setDataInizio(nuovaDataInizio);
+		prenotazioneEsistente.setDataFine(nuovaDataFine);
+		prenotazioneRepository.save(prenotazioneEsistente);
+
+		return prenotazioneEsistente;
+	}
+
+	public List<Prenotazione> getAllPrenotazioni() {
+		return prenotazioneRepository.findAll();
+	}
+
+	public Prenotazione getPrenotazioneById(Long idPrenotazione) throws PrenotazioneNotFoundException {
+		Optional<Prenotazione> prenotazioneOptional = prenotazioneRepository.findById(idPrenotazione);
+		if (prenotazioneOptional.isPresent()) {
+			return prenotazioneOptional.get();
+		} else {
+			throw new PrenotazioneNotFoundException("Prenotazione con ID " + idPrenotazione + " non trovata.");
+		}
+	}
+
+	public void deletePrenotazione(Long idPrenotazione) throws PrenotazioneNotFoundException {
+		// Controlla se la prenotazione esiste
+		if (!prenotazioneRepository.existsById(idPrenotazione)) {
+			throw new PrenotazioneNotFoundException();
+		}
+
+		prenotazioneRepository.deleteById(idPrenotazione);
+	}
+
 }

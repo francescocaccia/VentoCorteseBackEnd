@@ -15,4 +15,7 @@ public interface PrenotazioneRepository extends JpaRepository<Prenotazione, Long
 	List<Prenotazione> findByAppartamentinoAndDataInizioLessThanEqualAndDataFineGreaterThanEqual(
 			Appartamentini appartamentino, Date dataFine, Date dataInizio);
 
+	List<Prenotazione> findByAppartamentinoAndDataInizioLessThanEqualAndDataFineGreaterThanEqualAndIdPrenotazioneNot(
+			Appartamentini appartamentino, Date dataFine, Date dataInizio, Long idPrenotazione);
+
 }

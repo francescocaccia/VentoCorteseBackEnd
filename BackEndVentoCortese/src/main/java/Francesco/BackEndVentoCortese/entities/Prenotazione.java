@@ -20,8 +20,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "prenotazioni")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Prenotazione {
 
 	@Id
@@ -31,6 +31,7 @@ public class Prenotazione {
 	@Temporal(TemporalType.DATE) // Usa solo la data, non l'orario
 	@Column
 	@NotNull
+
 	private Date dataInizio;
 
 	@Temporal(TemporalType.DATE) // Usa solo la data, non l'orario
