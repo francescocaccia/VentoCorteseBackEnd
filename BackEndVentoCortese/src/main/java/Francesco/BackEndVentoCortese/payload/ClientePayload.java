@@ -19,4 +19,7 @@ public class ClientePayload {
 	@NotBlank(message = "Il telefono è obbligatorio")
 	private String telefono;
 
+	@NotBlank(message = "La password è obbligatoria")
+	private String password;
+
 }
