@@ -56,8 +56,7 @@ public class Appartamentini {
 	@Column(length = 1000)
 	private String descrizione;
 
-	@OneToMany(mappedBy = "appartamentini", cascade = CascadeType.ALL)
-	@JsonIgnore
+	@OneToMany(mappedBy = "appartamentini", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Immagine> immagini;
 
 	@OneToMany(mappedBy = "appartamentino", fetch = FetchType.LAZY)

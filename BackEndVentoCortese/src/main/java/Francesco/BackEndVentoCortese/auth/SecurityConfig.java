@@ -29,6 +29,7 @@ public class SecurityConfig {
 		http.csrf(c -> c.disable());
 
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/appartamentini/**").permitAll());
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/appartamentini/create/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/appartamentini/all/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/prenotazioni/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/cliente/**").permitAll());

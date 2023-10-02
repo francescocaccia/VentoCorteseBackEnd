@@ -2,7 +2,6 @@ package Francesco.BackEndVentoCortese.payload;
 
 import java.util.Set;
 
-import Francesco.BackEndVentoCortese.entities.Immagine;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,7 @@ public class AppartamentiniPayload {
 	private double tariffa;
 	private boolean disponibilita;
 	private String descrizione;
-	private Set<Immagine> immagini;
+	private Set<ImmaginePayload> immagini;
 
 	@Override
 	public String toString() {
