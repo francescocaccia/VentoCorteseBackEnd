@@ -1,5 +1,7 @@
 package Francesco.BackEndVentoCortese.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,7 @@ public class ClienteService {
 		return cliente;
 	}
 
-	public Cliente findByEmail(String email) {
+	public Optional<Cliente> findByEmail(String email) {
 		return clienteRepository.findByEmail(email);
 	}
 

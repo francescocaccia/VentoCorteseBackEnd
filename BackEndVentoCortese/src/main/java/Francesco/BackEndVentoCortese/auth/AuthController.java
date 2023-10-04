@@ -13,17 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Francesco.BackEndVentoCortese.entities.Cliente;
 import Francesco.BackEndVentoCortese.exception.AuthenticationSuccessfullPayload;
+import Francesco.BackEndVentoCortese.exception.BadRequestException;
 import Francesco.BackEndVentoCortese.exception.UnauthorizedException;
 import Francesco.BackEndVentoCortese.payload.ClientePayload;
 import Francesco.BackEndVentoCortese.service.ClienteService;
 
 @RestController
 @RequestMapping("/auth")
-//@CrossOrigin(origins = "http://localhost:3000**")
 public class AuthController {
 
 	@Autowired
 	ClienteService clienteService;
+
 	@Autowired
 	private JWTTools jwtTools;
 
@@ -31,10 +32,14 @@ public class AuthController {
 	private PasswordEncoder bcrypt;
 
 	@PostMapping("/register")
-	public ResponseEntity<Cliente> register(@RequestBody @Validated ClientePayload body) {
+	public ResponseEntity<Cliente> register(@RequestBody @Validated ClientePayload body) throws Exception {
 
 		// Converti il ClientePayload in un oggetto Cliente
 		Cliente clienteToRegister = clienteService.convertiDaPayload(body);
+
+		clienteService.findByEmail(clienteToRegister.getEmail()).ifPresent(user -> {
+			throw new BadRequestException("Email " + user.getEmail() + " già utilizzata!");
+		});
 
 		// Imposta la password codificata sul cliente
 		clienteToRegister.setPassword(bcrypt.encode(body.getPassword()));
@@ -49,9 +54,11 @@ public class AuthController {
 	public ResponseEntity<AuthenticationSuccessfullPayload> login(@RequestBody ClientePayload body)
 			throws NotFoundException {
 
-		Cliente user = clienteService.findByEmail(body.getEmail());
+		Cliente userOpt = clienteService.findByEmail(body.getEmail()).orElseThrow(() -> new NotFoundException());
+
+		Long id = userOpt.getId();
 		String plainPW = body.getPassword();
-		String hashedPW = user.getPassword();
+		String hashedPW = userOpt.getPassword();
 
 		if (!bcrypt.matches(plainPW, hashedPW)) {
 			throw new UnauthorizedException("Credenziali non valide!");
@@ -59,13 +66,12 @@ public class AuthController {
 
 		String token;
 		try {
-			token = jwtTools.createToken(user);
+			token = jwtTools.createToken(userOpt);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new UnauthorizedException("Impossibile generare il token. Per favore prova di nuovo.");
 		}
-
-		return new ResponseEntity<>(new AuthenticationSuccessfullPayload(user.getNome(), token), HttpStatus.OK);
+		System.out.println(id);
+		return new ResponseEntity<>(new AuthenticationSuccessfullPayload(userOpt.getNome(), token, id), HttpStatus.OK);
 	}
-
 }

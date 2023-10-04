@@ -28,12 +28,12 @@ public class PrenotazioneService {
 	private PrenotazioneRepository prenotazioneRepository;
 	@Autowired
 	private ClienteRepository clienteRepository;
-
 	@Autowired
 	private AppartamentiniRepository appartamentiniRepository;
 
 	public Prenotazione inserisciPrenotazione(PrenotazionePayload prenotazionePayload) throws Exception {
-		log.info("Tentativo di inserire una nuova prenotazione...");
+		log.info("Ricevuto payload per nuova prenotazione: {}", prenotazionePayload);
+		log.info("ID del cliente ricevuto: {}", prenotazionePayload.getIdCliente());
 
 		if (prenotazionePayload.getDataInizio().after(prenotazionePayload.getDataFine())) {
 			log.error("Data inizio dopo data fine!");
@@ -61,6 +61,7 @@ public class PrenotazioneService {
 			log.error("Cliente con ID {} non trovato!", prenotazionePayload.getIdCliente());
 			throw new Exception("Cliente non trovato!");
 		}
+		log.info("Recuperato cliente con ID: {}", cliente.getId());
 
 		String codicePrenotazione = UUID.randomUUID().toString();
 		log.info("Generato codice prenotazione: {}", codicePrenotazione);
@@ -68,7 +69,7 @@ public class PrenotazioneService {
 		Prenotazione nuovaPrenotazione = new Prenotazione(null, prenotazionePayload.getDataInizio(),
 				prenotazionePayload.getDataFine(), cliente, false, 0.0, appartamento, codicePrenotazione);
 
-		log.info("Salvataggio nuova prenotazione nel database...");
+		log.info("Sto creando una nuova prenotazione con codice: {}", codicePrenotazione);
 		return prenotazioneRepository.save(nuovaPrenotazione);
 	}
 

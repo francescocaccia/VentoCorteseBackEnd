@@ -13,5 +13,10 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 	}
 
+	@ExceptionHandler(BadRequestException.class)
+	public ResponseEntity<String> handleBadRequestException(BadRequestException e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+	}
+
 	// Puoi aggiungere altri gestori di eccezioni qui se necessario.
 }

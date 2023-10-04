@@ -25,7 +25,6 @@ import lombok.Data;
 @Data
 public class Cliente implements UserDetails {
 	@Id
-
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idCliente;
 
@@ -41,7 +40,7 @@ public class Cliente implements UserDetails {
 	@Column
 	private String telefono;
 
-	@OneToMany(mappedBy = "cliente")
+	@OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<Recensione> recensioni = new HashSet<>();
 
@@ -85,6 +84,11 @@ public class Cliente implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true; // Supponendo che tutti gli utenti sono sempre abilitati
+	}
+
+	public boolean isPresent() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

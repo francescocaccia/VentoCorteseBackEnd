@@ -1,6 +1,7 @@
 package Francesco.BackEndVentoCortese.auth;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,7 +42,13 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
 			String email = jwtTools.extractSubject(accessToken); // Usiamo l'istanza jwtTools
 
-			Cliente cliente = clienteService.findByEmail(email);
+			Optional<Cliente> clienteOpt = clienteService.findByEmail(email);
+
+			if (!clienteOpt.isPresent()) {
+				throw new UnauthorizedException("Utente non trovato");
+			}
+
+			Cliente cliente = clienteOpt.get();
 
 			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(cliente, null,
 					cliente.getAuthorities());
@@ -53,7 +60,6 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 		} else {
 			filterChain.doFilter(request, response);
 		}
-
 	}
 
 	@Override
@@ -63,7 +69,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
 		// Specifica gli endpoint liberi che non richiedono autenticazione
 		String[] freeEndpoints = { "/appartamentini/**", "/appartamentini/all/**", "/appartamentini/create",
-				"/prenotazioni", "/cliente" };
+				"/prenotazioni", "/prenotazioni/*", "/clienti/add/**", "/auth/register", "/auth/login" };
 
 		// Controlla se il servletPath corrisponde a uno degli endpoint liberi
 		for (String endpoint : freeEndpoints) {

@@ -1,14 +1,23 @@
 package Francesco.BackEndVentoCortese.exception;
 
+import lombok.Data;
+
+@Data
 public class AuthenticationSuccessfullPayload {
 
 	private String nome;
 	private String token;
+	private Long idCliente;
 
 	// Costruttore
-	public AuthenticationSuccessfullPayload(String nome, String token) {
+	public AuthenticationSuccessfullPayload(String nome, String token, Long idCliente) {
 		this.nome = nome;
 		this.token = token;
+		this.idCliente = idCliente;
+	}
+
+	public AuthenticationSuccessfullPayload(String nome2, String token2) {
+
 	}
 
 	// Getters e Setters

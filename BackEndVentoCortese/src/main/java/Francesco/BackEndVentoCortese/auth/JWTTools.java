@@ -25,8 +25,8 @@ public class JWTTools {
 		this.expiration = Integer.parseInt(expirationInDays) * 24 * 60 * 60 * 1000;
 	}
 
-	public String createToken(Cliente cliente) {
-		String token = Jwts.builder().setSubject(cliente.getEmail()).setIssuedAt(new Date(System.currentTimeMillis()))
+	public String createToken(Cliente user) {
+		String token = Jwts.builder().setSubject(user.getEmail()).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + expiration))
 				.signWith(Keys.hmacShaKeyFor(secret.getBytes())).compact();
 		return token;
