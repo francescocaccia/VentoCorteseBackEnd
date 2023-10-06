@@ -47,6 +47,10 @@ public class Appartamentini {
 
 	@Column
 	@NotNull
+	private double metriQuadri;
+
+	@Column
+	@NotNull
 	private double tariffa;
 
 	@Column
@@ -66,8 +70,8 @@ public class Appartamentini {
 	@Override
 	public String toString() {
 		return "Appartamentini [idAppartamentino=" + idAppartamentino + ", nome=" + nome + ", numeroDiCamere="
-				+ numeroDiCamere + ", capienzaMassima=" + capienzaMassima + ", tariffa=" + tariffa + ", disponibilita="
-				+ disponibilita + ", descrizione=" + descrizione + "]";
+				+ numeroDiCamere + ", capienzaMassima=" + capienzaMassima + ", metriQuadri=" + metriQuadri
+				+ ", tariffa=" + tariffa + ", disponibilita=" + disponibilita + ", descrizione=" + descrizione + "]";
 	}
 
 }

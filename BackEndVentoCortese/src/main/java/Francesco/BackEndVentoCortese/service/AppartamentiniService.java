@@ -36,9 +36,11 @@ public class AppartamentiniService {
 		appartamentino.setNome(appartamentiniPayload.getNome());
 		appartamentino.setNumeroDiCamere(appartamentiniPayload.getNumeroDiCamere());
 		appartamentino.setCapienzaMassima(appartamentiniPayload.getCapienzaMassima());
+		appartamentino.setMetriQuadri(appartamentiniPayload.getMetriQuadri());
 		appartamentino.setTariffa(appartamentiniPayload.getTariffa());
 		appartamentino.setDisponibilita(appartamentiniPayload.isDisponibilita());
 		appartamentino.setDescrizione(appartamentiniPayload.getDescrizione());
+
 		Set<Immagine> immaginiEntities = appartamentiniPayload.getImmagini().stream().map(payload -> {
 			Immagine immagine = new Immagine();
 			immagine.setImmagine1(payload.getImmagine1());

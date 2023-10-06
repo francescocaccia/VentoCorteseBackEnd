@@ -16,6 +16,7 @@ public class AppartamentiniPayload {
 	private String nome;
 	private int numeroDiCamere;
 	private int capienzaMassima;
+	private double metriQuadri;
 	private double tariffa;
 	private boolean disponibilita;
 	private String descrizione;
@@ -23,9 +24,9 @@ public class AppartamentiniPayload {
 
 	@Override
 	public String toString() {
-		return "AppartamentiniPayload [idAppartamentino=" + idAppartamentino + ", nome=" + nome + ", numeroDiCamere="
-				+ numeroDiCamere + ", capienzaMassima=" + capienzaMassima + ", tariffa=" + tariffa + ", disponibilita="
-				+ disponibilita + ", descrizione=" + descrizione + ", immagini=" + immagini + "]";
+		return "Appartamentini [idAppartamentino=" + idAppartamentino + ", nome=" + nome + ", numeroDiCamere="
+				+ numeroDiCamere + ", capienzaMassima=" + capienzaMassima + ", metriQuadri=" + metriQuadri
+				+ ", tariffa=" + tariffa + ", disponibilita=" + disponibilita + ", descrizione=" + descrizione + "]";
 	}
 
 }

@@ -32,4 +32,8 @@ public class ClienteService {
 		return clienteRepository.findByEmail(email);
 	}
 
+	public Optional<Cliente> findById(Long id) {
+		return clienteRepository.findById(id);
+	}
+
 }

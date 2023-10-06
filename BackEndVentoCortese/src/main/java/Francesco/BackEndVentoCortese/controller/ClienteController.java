@@ -1,9 +1,11 @@
 package Francesco.BackEndVentoCortese.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +31,23 @@ public class ClienteController {
 	public ClienteResponse getCurrentUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Cliente clienteLoggato = (Cliente) authentication.getPrincipal();
-		ClienteResponse clienteResponse = ClienteResponse.creaResponse(clienteLoggato, null); // Ancora una volta,
-																								// impostato su null per
-																								// il token. Modifica se
-																								// necessario.
+		ClienteResponse clienteResponse = ClienteResponse.creaResponse(clienteLoggato, null);
+
 		return clienteResponse;
 	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Cliente> getClienteById(@PathVariable Long id) {
+		return clienteService.findById(id).map(cliente -> ResponseEntity.ok(cliente))
+				.orElse(ResponseEntity.notFound().build());
+	}
+
+	@GetMapping("/me/dettagli")
+	public ResponseEntity<Cliente> getLoggedClienteDetails() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Cliente clienteLoggato = (Cliente) authentication.getPrincipal();
+		Long clienteId = clienteLoggato.getId(); // Supponendo che tu abbia un metodo getId() nella tua entità Cliente
+		return getClienteById(clienteId);
+	}
+
 }
